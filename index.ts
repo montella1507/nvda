@@ -61,7 +61,7 @@ const createBuilderClass = (pass: Pass, sockets: Socket[]) => {
 // SETUP
 const data: Data = jsonData;
 const container = document.getElementById('rete');
-const editor = new Rete.NodeEditor('demo@0.1.0', container);
+const editor = new Rete.NodeEditor('nvda@0.1.0', container);
 editor.use(ConnectionPlugin);
 editor.use(VueRenderPlugin);
 editor.use(ContextMenuPlugin, {
@@ -99,14 +99,7 @@ data.passes
 // });
 
 
-editor.on(
-  'nodecreated noderemoved connectioncreated connectionremoved',
-  async () => {
-    console.log(editor.toJSON());
-  }
-);
-
-window.saveToFile = () => {
+(window as any).saveToFile = () => {
   let fileContent = {
     ...data,
     editor: editor.toJSON(),
