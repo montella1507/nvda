@@ -77,13 +77,13 @@
     "name": "ExtractZ",
     "inputs": [
       {
-       "name": "Texture2D",
-       "type": "Color"
+       "name": "InputTexture",
+       "type": "Texture2D"
       }
     ],
     "outputs": [
      {
-       "name": "Z",
+       "name": "Z Texture",
        "type": "Texture2D"
      }
     ]

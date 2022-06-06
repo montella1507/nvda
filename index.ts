@@ -8,6 +8,7 @@ import ConnectionPlugin from 'rete-connection-plugin';
 import VueRenderPlugin from 'rete-vue-render-plugin';
 import AutoArrangePlugin from 'rete-auto-arrange-plugin';
 import { NodeData,WorkerInputs,WorkerOutputs } from 'rete/types/core/data';
+import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin';
 
 
 
@@ -82,6 +83,7 @@ const container = document.getElementById("rete");
 const editor = new Rete.NodeEditor('demo@0.1.0', container);
 editor.use(ConnectionPlugin);
 editor.use(VueRenderPlugin);
+editor.use(ContextMenuPlugin.default);
 editor.use(AutoArrangePlugin, { margin: {x: 50, y: 50 }, depth: 0 }); 
 
 
