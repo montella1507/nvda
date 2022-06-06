@@ -1,0 +1,60 @@
+{
+  "valueTypes": [
+    {
+      "name": "Texture2D"
+    },
+    {
+      "name": "Color"
+    },
+    {
+      "name": "Vector2"
+    },
+    {
+      "name": "Vector3"
+    },
+    {
+      "name": "Number"
+    }
+  ],
+ "passes": [
+   {
+     "name": "Alpha",
+     "inputs": [
+       {
+        "name": "Base color",
+        "type": "Color"
+       },
+       {
+        "name": "Alpha",
+        "type": "Number"
+       }
+     ],
+     "outputs": [
+      {
+        "name": "Result color",
+        "type": "Color"
+      }
+     ]
+   },
+   {
+    "name": "Darken",
+    "inputs": [
+      {
+       "name": "Base color",
+       "type": "Color"
+      },
+      {
+       "name": "Percentage",
+       "type": "Number"
+      }
+    ],
+    "outputs": [
+     {
+       "name": "Result color",
+       "type": "Color"
+     }
+    ]
+  }
+ ]
+
+}
