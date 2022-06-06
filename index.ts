@@ -77,7 +77,7 @@ editor.use(ContextMenuPlugin, {
   },
 });
 
-// Passes definitions
+// Create sockets based on value types
 const sockets = data.valueTypes.map((vType) => new Rete.Socket(vType.name));
 
 // Create components and register them to the editor
