@@ -1,16 +1,11 @@
 import './style.css';
-
-
 import '@babel/polyfill'
 import { Node } from "rete";
 import Rete from "rete";
 import ConnectionPlugin from 'rete-connection-plugin';
 import VueRenderPlugin from 'rete-vue-render-plugin';
-import AutoArrangePlugin from 'rete-auto-arrange-plugin';
 import { NodeData,WorkerInputs,WorkerOutputs } from 'rete/types/core/data';
-import ContextMenuPlugin, { Menu, Item, Search } from 'rete-context-menu-plugin';
-
-
+import ContextMenuPlugin from 'rete-context-menu-plugin';
 
 import jsonData from './data.json';
 
@@ -28,13 +23,11 @@ interface ValueType {
   name: string;
 }
 
-
 interface Pass {
   name: string,
   inputs: Input[];
   outputs: Output[];
 }
-
 
 interface Instance {
   name: string,
@@ -47,7 +40,7 @@ interface Data{
   instances: Instance[]
 }
 
-
+// Factory method returning builders
 const createComponent = (pass: Pass, sockets: Rete.Socket[])  => {
   return class extends Rete.Component {
   builder(node: Node): Promise<void> {
@@ -77,24 +70,34 @@ const createComponent = (pass: Pass, sockets: Rete.Socket[])  => {
 }
 
 
-
+// SETUP
 const data: Data = jsonData;
 const container = document.getElementById("rete");
 const editor = new Rete.NodeEditor('demo@0.1.0', container);
 editor.use(ConnectionPlugin);
 editor.use(VueRenderPlugin);
-editor.use(ContextMenuPlugin.default);
-editor.use(AutoArrangePlugin, { margin: {x: 50, y: 50 }, depth: 0 }); 
+editor.use(ContextMenuPlugin, {
+  searchBar: false, 
+  searchKeep: title => true,
+  delay: 100,
+  rename(component) {
+      return component.name;
+  },
+  nodeItems: {
+      'Delete': true, 
+      'Clone': true 
+  }
+});
 
 
+// Passes definitions
 const sockets = data.valueTypes.map(vType => new Rete.Socket(vType.name));
 const factories = data.passes.map(def => createComponent(def, sockets));
 const builders = factories.map(f => new f());
 builders.forEach(b => editor.register(b));
 
-// vytvoreni testovacich nodu
 
-
+// instances
 data.instances.forEach(async instance=> {
 
   const foundBuilder = builders.find(x=> x.name == instance.type) as Rete.Component;
@@ -103,9 +106,9 @@ data.instances.forEach(async instance=> {
 });
 
 
+editor.on('nodecreated noderemoved connectioncreated connectionremoved', async () => {
+  console.log(editor.toJSON());
+});
 
 
-const engine = new Rete.Engine('demo@0.1.0');
 
-
-console.log(editor.toJSON());
