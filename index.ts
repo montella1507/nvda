@@ -1,48 +1,26 @@
+// styles
 import './style.css';
+// rete base 
 import '@babel/polyfill'
 import { Node } from "rete";
-import Rete from "rete";
+import Rete, {Socket, Component, Input } from "rete";
 import ConnectionPlugin from 'rete-connection-plugin';
 import VueRenderPlugin from 'rete-vue-render-plugin';
 import { NodeData,WorkerInputs,WorkerOutputs } from 'rete/types/core/data';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
+
+// utility 
 import { download } from './download';
+// Data 
 import jsonData from './data.json';
 
-// jen at mame strongly typing
-interface Input {
-  name: string;
-  type: string;  
-}
-interface Output {
-  name: string;
-  type: string;  
-}
+// Strongly-typing
+import { Data, Pass } from './models';
 
-interface ValueType {
-  name: string;
-}
-
-interface Pass {
-  name: string,
-  inputs: Input[];
-  outputs: Output[];
-}
-
-interface Instance {
-  name: string,
-  type: string
-}
-
-interface Data{
-  passes: Pass[];
-  valueTypes: ValueType[];
-  instances: Instance[]
-}
 
 // Factory method returning builders
-const createComponent = (pass: Pass, sockets: Rete.Socket[])  => {
-  return class extends Rete.Component {
+const createComponent = (pass: Pass, sockets: Socket[])  => {
+  return class extends Component {
   builder(node: Node): Promise<void> {
       // pridame inputy
      pass.inputs.forEach(input => {
@@ -60,13 +38,12 @@ const createComponent = (pass: Pass, sockets: Rete.Socket[])  => {
      
     return Promise.resolve();
   }
-  worker(node: NodeData,inputs: WorkerInputs,outputs: WorkerOutputs,...args: unknown[]): void {
+  worker(node: NodeData,inputs: WorkerInputs,outputs: WorkerOutputs,...args: unknown[]): void {}
 
-}
-      constructor() {
-          super(pass.name);
-      }
-  } as Rete.Component;  
+  constructor() {
+     super(pass.name);
+  }
+  }
 }
 
 
@@ -100,7 +77,7 @@ builders.forEach(b => editor.register(b));
 // instances
 data.instances.forEach(async instance=> {
 
-  const foundBuilder = builders.find(x=> x.name == instance.type) as Rete.Component;
+  const foundBuilder = builders.find(x=> x.name == instance.type) as Component;
   const node = await foundBuilder.createNode();
   editor.addNode(node);
 });
