@@ -6,7 +6,7 @@ import ConnectionPlugin from 'rete-connection-plugin';
 import VueRenderPlugin from 'rete-vue-render-plugin';
 import { NodeData,WorkerInputs,WorkerOutputs } from 'rete/types/core/data';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
-
+import { download } from './download';
 import jsonData from './data.json';
 
 // jen at mame strongly typing
@@ -112,3 +112,11 @@ editor.on('nodecreated noderemoved connectioncreated connectionremoved', async (
 
 
 
+window.saveToFile = () => {
+
+  let fileContent = {
+    ...data,
+    editor: editor.toJSON()
+  };
+ download(JSON.stringify(fileContent, null, 2), "data.json", "application/json");
+};
