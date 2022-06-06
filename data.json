@@ -55,6 +55,20 @@
      }
     ]
   }
+ ],
+ "instances":  [
+   {
+     "name": "Alpha 1",
+     "type": "Alpha"
+   },
+   {
+    "name": "Alpha 2",
+    "type": "Alpha"
+  },
+  {
+    "name": "Darken 1",
+    "type": "Darken"
+  }
  ]
 
 }

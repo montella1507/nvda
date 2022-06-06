@@ -35,21 +35,26 @@ interface Pass {
 }
 
 
+interface Instance {
+  name: string,
+  type: string
+}
 
 interface Data{
   passes: Pass[];
   valueTypes: ValueType[];
+  instances: Instance[]
 }
 
 
 const createComponent = (pass: Pass, sockets: Rete.Socket[])  => {
   return class extends Rete.Component {
   builder(node: Node): Promise<void> {
-     
-     // pridame inputy
+    console.log("Volam se");    
+      // pridame inputy
      pass.inputs.forEach(input => {
       const foundSocket = sockets.find(s => s.name == input.type);
-      const newInput = new Rete.Input(pass.name + "/" + input.name, foundSocket);
+      const newInput = new Rete.Input(pass.name + "/" + input.name, input.name, foundSocket);
       node.addInput(newInput);
      });
      
@@ -75,16 +80,16 @@ editor.use(AutoArrangePlugin, { margin: {x: 50, y: 50 }, depth: 0 });
 
 
 const sockets = data.valueTypes.map(vType => new Rete.Socket(vType.name));
-
-
-const factories = data.passes.map(def => createComponent(def));
+const factories = data.passes.map(def => createComponent(def, sockets));
 const builders = factories.map(f => new f());
 builders.forEach(b => editor.register(b));
 
 // vytvoreni testovacich nodu
-const nodes = data.passes.map(d => new Rete.Node(d.name));
-nodes.forEach(n => editor.addNode(n));
 
+data.instances.forEach(in => {
+  const foundBuilder = builders.find(x=> x.name == x.name) as Rete.Component;
+  const node = foundBuilder.createNode();
+});
 
 const engine = new Rete.Engine('demo@0.1.0');
 
