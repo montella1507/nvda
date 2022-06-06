@@ -50,13 +50,19 @@ interface Data{
 const createComponent = (pass: Pass, sockets: Rete.Socket[])  => {
   return class extends Rete.Component {
   builder(node: Node): Promise<void> {
-    console.log("Volam se");    
       // pridame inputy
      pass.inputs.forEach(input => {
       const foundSocket = sockets.find(s => s.name == input.type);
       const newInput = new Rete.Input(pass.name + "/" + input.name, input.name, foundSocket);
       node.addInput(newInput);
      });
+
+        // pridame outputy
+        pass.outputs.forEach(input => {
+          const foundSocket = sockets.find(s => s.name == input.type);
+          const newOutput = new Rete.Output(pass.name + "/" + input.name, input.name, foundSocket);
+          node.addOutput(newOutput);
+         });
      
     return Promise.resolve();
   }
@@ -86,10 +92,16 @@ builders.forEach(b => editor.register(b));
 
 // vytvoreni testovacich nodu
 
-data.instances.forEach(in => {
-  const foundBuilder = builders.find(x=> x.name == x.name) as Rete.Component;
-  const node = foundBuilder.createNode();
+
+data.instances.forEach(async instance=> {
+
+  const foundBuilder = builders.find(x=> x.name == instance.type) as Rete.Component;
+  const node = await foundBuilder.createNode();
+  editor.addNode(node);
 });
+
+
+
 
 const engine = new Rete.Engine('demo@0.1.0');
 

@@ -1,6 +1,9 @@
 {
   "valueTypes": [
     {
+      "name": "Path"
+    },
+    {
       "name": "Texture2D"
     },
     {
@@ -17,6 +20,21 @@
     }
   ],
  "passes": [
+  {
+    "name": "FileImage2D",
+    "inputs": [
+      {
+       "name": "FilePath",
+       "type": "Path"
+      }
+    ],
+    "outputs": [
+     {
+       "name": "Texture",
+       "type": "Texture2D"
+     }
+    ]
+  },
    {
      "name": "Alpha",
      "inputs": [
@@ -54,6 +72,21 @@
        "type": "Color"
      }
     ]
+  },
+  {
+    "name": "ExtractZ",
+    "inputs": [
+      {
+       "name": "Texture2D",
+       "type": "Color"
+      }
+    ],
+    "outputs": [
+     {
+       "name": "Z",
+       "type": "Texture2D"
+     }
+    ]
   }
  ],
  "instances":  [
@@ -68,6 +101,14 @@
   {
     "name": "Darken 1",
     "type": "Darken"
+  },
+  {
+    "name": "Obrazek",
+    "type": "ExtractZ"
+  },
+  {
+    "name": "ExtractZ",
+    "type": "FileImage2D"
   }
  ]
 
