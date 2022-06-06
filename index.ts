@@ -18,7 +18,7 @@ import jsonData from './data.json';
 import { Data, Pass } from './models';
 
 // Factory method returning builders
-const createComponent = (pass: Pass, sockets: Socket[]) => {
+const createBuilderClass = (pass: Pass, sockets: Socket[]) => {
   return class extends Component {
     builder(node: Node): Promise<void> {
       // pridame inputy
@@ -79,9 +79,16 @@ editor.use(ContextMenuPlugin, {
 
 // Passes definitions
 const sockets = data.valueTypes.map((vType) => new Rete.Socket(vType.name));
-const factories = data.passes.map((def) => createComponent(def, sockets));
-const builders = factories.map((f) => new f());
-builders.forEach((b) => editor.register(b));
+
+// Create components and register them to the editor
+data.passes
+  // Create class dynamically
+  .map((def) => createBuilderClass(def, sockets))
+  // Create instances
+  .map((x) => new x())
+  // Register component instances
+  .forEach((b) => editor.register(b));
+
 
 // instances - uncomment to test
 // data.instances.forEach(async instance=> {
@@ -90,6 +97,7 @@ builders.forEach((b) => editor.register(b));
 //   const node = await foundBuilder.createNode();
 //   editor.addNode(node);
 // });
+
 
 editor.on(
   'nodecreated noderemoved connectioncreated connectionremoved',
