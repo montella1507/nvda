@@ -74,13 +74,13 @@ const builders = factories.map(f => new f());
 builders.forEach(b => editor.register(b));
 
 
-// instances
-data.instances.forEach(async instance=> {
+// instances - uncomment to test
+// data.instances.forEach(async instance=> {
 
-  const foundBuilder = builders.find(x=> x.name == instance.type) as Component;
-  const node = await foundBuilder.createNode();
-  editor.addNode(node);
-});
+//   const foundBuilder = builders.find(x=> x.name == instance.type) as Component;
+//   const node = await foundBuilder.createNode();
+//   editor.addNode(node);
+// });
 
 
 editor.on('nodecreated noderemoved connectioncreated connectionremoved', async () => {
